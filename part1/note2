@@ -1,0 +1,51 @@
+---
+
+### **Fichier : note2.md** – Sequence Diagrams for API Calls
+```markdown
+# Task 2 – Sequence Diagrams for API Calls
+
+## Diagrammes
+
+### User Registration
+```mermaid
+sequenceDiagram
+participant User
+participant API
+participant BusinessLogic
+participant Database
+
+User->>API: Register new account
+API->>BusinessLogic: Validate & create User
+BusinessLogic->>Database: Save User
+Database-->>BusinessLogic: Confirm Save
+BusinessLogic-->>API: Return Success
+API-->>User: Registration Complete
+Place Creation
+Diagramme
+sequenceDiagram
+User->>API: Create new Place
+API->>BusinessLogic: Validate & create Place
+BusinessLogic->>Database: Save Place
+Database-->>BusinessLogic: Confirm Save
+BusinessLogic-->>API: Return Success
+API-->>User: Place Created
+Review Submission
+Diagramme
+sequenceDiagram
+User->>API: Submit Review
+API->>BusinessLogic: Validate & create Review
+BusinessLogic->>Database: Save Review
+Database-->>BusinessLogic: Confirm Save
+BusinessLogic-->>API: Return Success
+API-->>User: Review Submitted
+Fetching List of Places
+Diagramme
+
+Notes
+Chaque diagramme montre comment les couches Presentation, Business Logic et Persistence interagissent.
+
+La facade sert d’interface unique entre l’API et les modèles.
+
+Les opérations CRUD sont réalisées dans la couche Persistence via la base de données.
+
+

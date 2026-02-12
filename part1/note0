@@ -1,0 +1,52 @@
+Fichier : note0.md – High-Level Package Diagram
+# Task 0 – High-Level Package Diagram
+
+## Diagramme
+```mermaid
+graph TD
+    %% Layers
+    Presentation[Presentation Layer]
+    BusinessLogic[Business Logic Layer]
+    Persistence[Persistence Layer]
+
+    %% Facade
+    Facade[HBnB Facade (Unified interface)]
+
+    %% Presentation Layer components
+    subgraph "Presentation Layer"
+        API[API / Endpoints (Controllers / Routes)]
+        Services[Services (Request Handling)]
+    end
+
+    %% Business Logic Layer components
+    subgraph "Business Logic Layer"
+        DomainModels[Domain Models (User, Place, Review, Amenity) + Business Rules]
+    end
+
+    %% Persistence Layer components
+    subgraph "Persistence Layer"
+        Repositories[Repositories / Storage (Data access abstraction)]
+        Database[Database (Persistent Storage)]
+    end
+
+    %% Communication
+    Presentation -->|Calls Facade| Facade
+    Facade --> BusinessLogic
+    BusinessLogic -->|CRUD / Data operations| Persistence
+
+    %% Detailed connections
+    API --> Services
+    Services --> Facade
+    Facade --> DomainModels
+    DomainModels --> Repositories
+    Repositories --> Database
+
+Notes
+
+Presentation Layer : Gère les API et les services pour les interactions avec l’utilisateur.
+
+Business Logic Layer : Contient les modèles de domaine et les règles métiers.
+
+Persistence Layer : Responsable de l’accès aux données et de leur stockage.
+
+HBnB Facade : Simplifie les interactions entre les couches Presentation et Business Logic.
