@@ -1,89 +1,89 @@
 # Git Intro Project
 
-# AirBnB Clone - HBNB v2 (Part 2)
+HBnB — Part 2 : Business Logic & API Endpoints
+Description
+Implémentation de la couche Présentation et Logique Métier de l'application HolbertonBnB,
+en utilisant Python, Flask et Flask-RESTx.
 
-## 📌 Description
-
-This project is part of the AirBnB Clone series.  
-In this part, we build a web application using **Flask**.  
-We implement static and dynamic routes with different patterns, support variables and type converters, and use HTML templates.
-
----
-
-## 🚀 Requirements
-
-- Python 3
-- Flask
-
-Install Flask (locally or globally):
-
-```bash
-pip install flask
-🗂️ Project Structure
+Architecture
 part2/
-├── 0-hello_route.py
-├── 1-hbnb_route.py
-├── 2-c_route.py
-├── 3-number_route.py
-├── 4-number_template.py
-├── 5-number_odd_or_even.py
-└── templates/
-    ├── number.html
-    └── number_odd_or_even.html
-▶️ Running the Application
+├── app/
+│   ├── __init__.py              ← Factory Flask + Flask-RESTx
+│   ├── api/
+│   │   └── v1/
+│   │       ├── __init__.py
+│   │       ├── users.py         ← GET / POST / PUT  /api/v1/users
+│   │       ├── amenities.py     ← GET / POST / PUT  /api/v1/amenities
+│   │       ├── places.py        ← GET / POST / PUT  /api/v1/places
+│   │       └── reviews.py       ← GET / POST / PUT / DELETE  /api/v1/reviews
+│   ├── models/
+│   │   ├── base_model.py        ← id, created_at, updated_at
+│   │   ├── user.py
+│   │   ├── amenity.py
+│   │   ├── place.py
+│   │   └── review.py
+│   ├── persistence/
+│   │   └── repository.py        ← Repository (ABC) + InMemoryRepository
+│   └── services/
+│       └── facade.py            ← HBnBFacade (singleton)
+├── config.py
+├── requirements.txt
+├── run.py
+└── test_models.py
 
-To start the web server, run any of the Python files:
+Patterns utilisés
+Facade
+Tous les endpoints API communiquent uniquement avec HBnBFacade.
+La façade coordonne les modèles et les repositories.
+API → HBnBFacade → InMemoryRepository → Modèles
+Repository (ABC)
+InMemoryRepository implémente l'interface Repository.
+En Part 3, on crée SQLAlchemyRepository sans toucher à la façade.
 
-python3 <filename>.py
+Installation
+bashpip install -r requirements.txt
+Lancer le serveur
+bashpython run.py
+Swagger UI disponible sur : http://localhost:5000/api/v1/doc
 
-For example:
+Endpoints
+MéthodeEndpointDescriptionGET/api/v1/users/Liste tous les usersPOST/api/v1/users/Crée un userGET/api/v1/users/{id}Récupère un userPUT/api/v1/users/{id}Modifie un userGET/api/v1/amenities/Liste tous les équipementsPOST/api/v1/amenities/Crée un équipementGET/api/v1/amenities/{id}Récupère un équipementPUT/api/v1/amenities/{id}Modifie un équipementGET/api/v1/places/Liste tous les logementsPOST/api/v1/places/Crée un logementGET/api/v1/places/{id}Récupère un logement (+owner +amenities)PUT/api/v1/places/{id}Modifie un logementGET/api/v1/places/{id}/reviewsListe les avis d'un logementGET/api/v1/reviews/Liste tous les avisPOST/api/v1/reviews/Crée un avisGET/api/v1/reviews/{id}Récupère un avisPUT/api/v1/reviews/{id}Modifie un avisDELETE/api/v1/reviews/{id}Supprime un avis ← seul DELETE
 
-python3 0-hello_route.py
+Exemples cURL
+bash# 1. Créer un user
+curl -X POST http://localhost:5000/api/v1/users/ \
+  -H "Content-Type: application/json" \
+  -d '{"first_name":"Alice","last_name":"Martin","email":"alice@test.com","password":"secret"}'
 
-The app will run by default on:
+# 2. Créer un équipement
+curl -X POST http://localhost:5000/api/v1/amenities/ \
+  -H "Content-Type: application/json" \
+  -d '{"name":"WiFi"}'
 
-http://0.0.0.0:5000
-🌐 Routes Implemented
-Route	Description
-/	Displays “Hello HBNB!”
-/hbnb	Displays “HBNB”
-/c/<text>	Displays “C <text>” with underscores replaced by spaces
-/python/	Displays “Python is cool”
-/python/<text>	Displays “Python <text>”
-/number/<n>	Displays “<n> is a number” (only integers)
-/number_template/<n>	Displays a page with “Number: <n>”
-/number_odd_or_even/<n>	Displays an HTML page showing if <n> is odd or even
-🧠 Concepts Used
+# 3. Créer un logement (remplace <user_id> et <amenity_id>)
+curl -X POST http://localhost:5000/api/v1/places/ \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Studio Paris","description":"Vue sur tour Eiffel","price":80,"latitude":48.8566,"longitude":2.3522,"owner_id":"<user_id>","amenities":["<amenity_id>"]}'
 
-Flask routing
+# 4. Créer un avis
+curl -X POST http://localhost:5000/api/v1/reviews/ \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Parfait !","rating":5,"place_id":"<place_id>","user_id":"<user_id>"}'
 
-Dynamic URLs
+# 5. Supprimer un avis
+curl -X DELETE http://localhost:5000/api/v1/reviews/<review_id>
 
-Type converters (int)
+Tests
+bashpython test_models.py
+40 tests couvrant :
 
-Templates with Jinja2
+Validation des modèles (User, Amenity, Place, Review)
+Logique métier via la façade
+Tests black-box de tous les endpoints REST
 
-Conditional rendering in HTML
 
-📄 Templates
+Auteur
+Holberton School — Projet HBnB Part 2
 
-Templates are stored in the templates/ directory and rendered with Flask:
-
-number.html — Displays the number
-
-number_odd_or_even.html — Displays number and whether it is odd or even
-
-🧪 Testing the Routes
-
-Use a browser or curl to test the endpoints:
-
-Examples:
-
-curl http://0.0.0.0:5000/
-curl http://0.0.0.0:5000/hbnb
-curl http://0.0.0.0:5000/c/hello_world
-curl http://0.0.0.0:5000/python/
-curl http://0.0.0.0:5000/python/rocks
-curl http://0.0.0.0:5000/number/42
-curl http://0.0.0.0:5000/number_template/42
-curl http://0.0.0.0:5000/number_odd_or_even/42
+@Annonym12345
+@Mahamadou19-75
