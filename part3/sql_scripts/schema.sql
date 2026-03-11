@@ -1,0 +1,59 @@
+DROP TABLE IF EXISTS place_amenity;
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS places;
+DROP TABLE IF EXISTS amenities;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id         VARCHAR(36)  PRIMARY KEY,
+    first_name VARCHAR(50)  NOT NULL,
+    last_name  VARCHAR(50)  NOT NULL,
+    email      VARCHAR(120) NOT NULL UNIQUE,
+    password   VARCHAR(128) NOT NULL,
+    is_admin   BOOLEAN      NOT NULL DEFAULT 0,
+    created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE amenities (
+    id         VARCHAR(36) PRIMARY KEY,
+    name       VARCHAR(50) NOT NULL,
+    created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE places (
+    id          VARCHAR(36)  PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    description TEXT,
+    price       FLOAT        NOT NULL,
+    latitude    FLOAT        NOT NULL,
+    longitude   FLOAT        NOT NULL,
+    owner_id    VARCHAR(36)  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE reviews (
+    id         VARCHAR(36) PRIMARY KEY,
+    text       TEXT        NOT NULL,
+    rating     INTEGER     NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    place_id   VARCHAR(36) NOT NULL REFERENCES places(id) ON DELETE CASCADE,
+    user_id    VARCHAR(36) NOT NULL REFERENCES users(id)  ON DELETE CASCADE,
+    created_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (place_id, user_id)
+);
+
+CREATE TABLE place_amenity (
+    place_id   VARCHAR(36) NOT NULL REFERENCES places(id)    ON DELETE CASCADE,
+    amenity_id VARCHAR(36) NOT NULL REFERENCES amenities(id) ON DELETE CASCADE,
+    PRIMARY KEY (place_id, amenity_id)
+);
+
+INSERT INTO amenities (id, name, created_at, updated_at) VALUES
+    ('00000000-0000-0000-0000-000000000001', 'WiFi',             CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('00000000-0000-0000-0000-000000000002', 'Swimming Pool',    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('00000000-0000-0000-0000-000000000003', 'Air Conditioning', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('00000000-0000-0000-0000-000000000004', 'Parking',          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('00000000-0000-0000-0000-000000000005', 'Kitchen',          CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
