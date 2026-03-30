@@ -1,26 +1,41 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from app import db
 
-class BaseModel(db.Model):
-    __abstract__ = True
 
-    id = db.Column(db.String(36), primary_key=True,
-                   default=lambda: str(uuid.uuid4()))
-    created_at = db.Column(db.DateTime,
-                           default=lambda: datetime.now(timezone.utc),
-                           nullable=False)
-    updated_at = db.Column(db.DateTime,
-                           default=lambda: datetime.now(timezone.utc),
-                           onupdate=lambda: datetime.now(timezone.utc),
-                           nullable=False)
+class BaseModel(db.Model):
+    """
+    Abstract base model — Task 6.
+    Maps id, created_at, updated_at to SQLAlchemy columns.
+    All concrete models inherit from this class.
+    """
+    __abstract__ = True   # SQLAlchemy will NOT create a table for this class
+
+    id         = db.Column(db.String(36), primary_key=True,
+                           default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                           onupdate=datetime.utcnow, nullable=False)
 
     def save(self):
-        self.updated_at = datetime.now(timezone.utc)
+        """Flush updated_at and commit."""
+        self.updated_at = datetime.utcnow()
         db.session.commit()
 
-    def update(self, data: dict):
+    def update(self, data):
+        """
+        Update attributes from a dict.
+        Protects id, created_at, updated_at from direct modification.
+        """
+        protected = {'id', 'created_at', 'updated_at'}
         for key, value in data.items():
-            if hasattr(self, key):
+            if key not in protected and hasattr(self, key):
                 setattr(self, key, value)
         self.save()
+
+    def to_dict(self):
+        return {
+            'id':         self.id,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }

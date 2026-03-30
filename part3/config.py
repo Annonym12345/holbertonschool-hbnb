@@ -1,26 +1,30 @@
 import os
 
+
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-prod')
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-secret-key-change-in-prod')
+    """Base configuration."""
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-prod')
     DEBUG = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-change-in-prod')
+
 
 class DevelopmentConfig(Config):
+    """Development configuration — SQLite."""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///development.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        'DATABASE_URL', 'sqlite:///hbnb_dev.db'
+    )
 
-class TestingConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    JWT_SECRET_KEY = 'test-jwt-secret'
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///production.db')
+    """Production configuration."""
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
+
 
 config = {
     'development': DevelopmentConfig,
-    'testing':     TestingConfig,
-    'production':  ProductionConfig,
-    'default':     DevelopmentConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
 }

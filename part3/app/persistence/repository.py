@@ -1,21 +1,35 @@
 from abc import ABC, abstractmethod
 from app import db
 
+
 class Repository(ABC):
+    """Abstract repository interface."""
+
     @abstractmethod
     def add(self, obj): pass
+
     @abstractmethod
     def get(self, obj_id): pass
+
     @abstractmethod
     def get_all(self): pass
+
     @abstractmethod
     def update(self, obj_id, data): pass
+
     @abstractmethod
     def delete(self, obj_id): pass
+
     @abstractmethod
     def get_by_attribute(self, attr_name, attr_value): pass
 
+
 class SQLAlchemyRepository(Repository):
+    """
+    SQLAlchemy-based repository — Task 5.
+    Replaces the in-memory repository from Part 2.
+    """
+
     def __init__(self, model):
         self.model = model
 
@@ -32,7 +46,8 @@ class SQLAlchemyRepository(Repository):
     def update(self, obj_id, data):
         obj = self.get(obj_id)
         if obj:
-            obj.update(data)
+            obj.update(data)   # BaseModel.update() handles save/commit
+        return obj
 
     def delete(self, obj_id):
         obj = self.get(obj_id)
