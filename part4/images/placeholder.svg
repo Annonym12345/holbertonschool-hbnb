@@ -1,0 +1,24 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="400" height="300" fill="url(#bg)"/>
+  
+  <!-- House icon in center -->
+  <g transform="translate(150, 100)">
+    <path d="M50 10 L10 50 L20 50 L20 90 L40 90 L40 70 L60 70 L60 90 L80 90 L80 50 L90 50 Z" 
+          fill="#cccccc" opacity="0.5"/>
+    <rect x="40" y="70" width="20" height="20" fill="#f0f0f0"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="240" font-family="Arial, sans-serif" font-size="24" 
+        fill="#999999" text-anchor="middle">
+    Place Image
+  </text>
+</svg>

@@ -1,0 +1,11 @@
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#FF5A5F"/>
+  
+  <!-- House icon -->
+  <g transform="translate(8, 8)">
+    <path d="M8 2 L2 8 L3 8 L3 14 L6 14 L6 11 L10 11 L10 14 L13 14 L13 8 L14 8 Z" 
+          fill="white"/>
+    <rect x="6" y="11" width="4" height="3" fill="#FF5A5F"/>
+  </g>
+</svg> 

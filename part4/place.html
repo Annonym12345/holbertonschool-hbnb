@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Place Details - HBnB">
+    <title>Place Details - HBnB</title>
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="HBnB Logo" class="logo">
+                <h1>HBnB</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" id="login-link" class="login-button">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Place Details Section -->
+            <section id="place-details" class="place-details">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading place details...</p>
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section id="reviews-section" class="reviews-section">
+                <h2>Reviews</h2>
+                <div id="reviews-list" class="reviews-list">
+                    <!-- Reviews will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Add Review Section (Only for authenticated users) -->
+            <section id="add-review" class="add-review" style="display: none;">
+                <h2>Add Your Review</h2>
+                <form id="review-form" class="form">
+                    <div class="form-group">
+                        <label for="review-rating">Rating:</label>
+                        <select id="review-rating" name="rating" required class="form-control">
+                            <option value="">Select rating</option>
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="3">3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Poor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-text">Your Review:</label>
+                        <textarea 
+                            id="review-text" 
+                            name="comment" 
+                            rows="5" 
+                            placeholder="Share your experience..."
+                            required
+                            maxlength="1000"
+                            class="form-control"
+                        ></textarea>
+                        <small class="form-text">Maximum 1000 characters</small>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Review</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 HBnB. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/scripts.js"></script>
+    <script src="scripts/place.js"></script>
+</body>
+</html>

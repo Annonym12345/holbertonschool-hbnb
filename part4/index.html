@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HBnB - Find your perfect place to stay">
+    <title>HBnB - Places</title>
+    <link rel="icon" type="image/svg+xml" href="images/icon.svg">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="images/logo.svg" alt="HBnB Logo" class="logo">
+                <h1>HBnB</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="#" id="login-link" class="login-button">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Filters Section -->
+            <section class="filters-section">
+                <h2>Find Your Perfect Place</h2>
+                <div class="filter-container">
+                    <label for="price-filter">Filter by Price:</label>
+                    <select id="price-filter" class="filter-select">
+                        <option value="all">All</option>
+                        <option value="10">Up to $10</option>
+                        <option value="50">Up to $50</option>
+                        <option value="100">Up to $100</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Places List -->
+            <section id="places-list" class="places-container">
+                <!-- Places will be dynamically loaded here -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading amazing places...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 HBnB. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/scripts.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
+</html>
