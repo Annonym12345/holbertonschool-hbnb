@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API - HBnB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        input {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Connexion API HBnB</h1>
+    
+    <!-- Test 1: Health Check -->
+    <div class="test-section">
+        <h2>Test 1: Health Check</h2>
+        <p>Vérifier que l'API est accessible</p>
+        <button onclick="testHealth()">Tester Health Check</button>
+        <div id="health-result" class="result"></div>
+    </div>
+    
+    <!-- Test 2: Create User -->
+    <div class="test-section">
+        <h2>Test 2: Créer un Utilisateur</h2>
+        <input type="email" id="reg-email" placeholder="Email" value="test@hbnb.com">
+        <input type="password" id="reg-password" placeholder="Mot de passe" value="Test123!">
+        <input type="text" id="reg-firstname" placeholder="Prénom" value="Test">
+        <input type="text" id="reg-lastname" placeholder="Nom" value="User">
+        <button onclick="testCreateUser()">Créer Utilisateur</button>
+        <div id="create-result" class="result"></div>
+    </div>
+    
+    <!-- Test 3: Login -->
+    <div class="test-section">
+        <h2>Test 3: Connexion (Login)</h2>
+        <input type="email" id="login-email" placeholder="Email" value="test@hbnb.com">
+        <input type="password" id="login-password" placeholder="Mot de passe" value="Test123!">
+        <button onclick="testLogin()">Se Connecter</button>
+        <div id="login-result" class="result"></div>
+    </div>
+    
+    <!-- Test 4: Get Places -->
+    <div class="test-section">
+        <h2>Test 4: Récupérer les Logements</h2>
+        <button onclick="testGetPlaces()">Récupérer Places</button>
+        <div id="places-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api/v1';
+        let authToken = null;
+
+        // Test 1: Health Check
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.textContent = 'Test en cours...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Succès!\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur de connexion\n${error.message}\n\nVérifiez que Part 2 (API) est lancé sur le port 5000!`;
+            }
+        }
+
+        // Test 2: Create User
+        async function testCreateUser() {
+            const resultDiv = document.getElementById('create-result');
+            resultDiv.textContent = 'Création en cours...';
+            resultDiv.className = 'result';
+            
+            const userData = {
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value,
+                first_name: document.getElementById('reg-firstname').value,
+                last_name: document.getElementById('reg-lastname').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Utilisateur créé!\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur\n${error.message}`;
+            }
+        }
+
+        // Test 3: Login
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.textContent = 'Connexion en cours...';
+            resultDiv.className = 'result';
+            
+            const loginData = {
+                email: document.getElementById('login-email').value,
+                password: document.getElementById('login-password').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.access_token) {
+                    authToken = data.access_token;
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Connexion réussie!\nStatus: ${response.status}\nToken: ${data.access_token.substring(0, 50)}...\nUser: ${JSON.stringify(data.user, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Échec de connexion\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur\n${error.message}`;
+            }
+        }
+
+        // Test 4: Get Places
+        async function testGetPlaces() {
+            const resultDiv = document.getElementById('places-result');
+            resultDiv.textContent = 'Récupération en cours...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/places`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    const places = data.places || data || [];
+                    resultDiv.textContent = `✅ Succès!\nNombre de places: ${places.length}\nData: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur\nStatus: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur\n${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
